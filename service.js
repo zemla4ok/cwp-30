@@ -23,7 +23,7 @@ app.get('/protected_resource', async function(req, res) {
         res.json(user);
     }
     else{
-        res.redirect('http://localhost:8000');
+        res.redirect('http://localhost:8000/login?source=/protected-resource&callback=localhost:7000/token');
     }
 })
 
