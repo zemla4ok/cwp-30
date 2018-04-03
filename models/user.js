@@ -6,7 +6,7 @@ module.exports = (Sequelize, sequeize) => {
             autoIncrement: true
         },
         email: Sequelize.STRING,
-        password: sequeize.STRING,
+        password: Sequelize.STRING,
         codes: Sequelize.STRING
     })
 }
