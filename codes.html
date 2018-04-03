@@ -1,0 +1,26 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>code</title>
+        
+    </head>
+    <body>
+        <form action="/codes" method="POST">
+            <input type="label" id="cod"><br>
+            <input type="number" name="code" placeholder="code"/><br>
+            <input type="submit" value="send">
+        </form>
+    </body>
+    <script>   
+            let result = null;
+            let tmp = [];
+            location.search.substr(1)
+                            .split('&')
+                            .forEach((item) => {
+                                tmp = item.split('=');
+                                if(tmp[0] === 'code')
+                                    result = decodeURIComponent(tmp[1]);
+                            })
+            document.getElementById('cod').value = 'Input code №' + result;
+        </script>
+</html>
