@@ -5,6 +5,7 @@ const Sequelize = require('sequelize');
 const config = require('./config.json');
 const db = require('./models')(Sequelize, config);
 const data = require('./models/data');
+const helpers = require('./helpers');
 
 const authCookie = '__service_token';
 const port = 7000;
@@ -15,8 +16,15 @@ app.use(cookieParser());
 
 app.get('/protected_resource', async function(req, res) {
     const token = req.cookies[authCookie];
-    
+    const userToken = helpers.verifyToken(token);
+    if(userToken){
+        const user = await db.user.findById(userData.id);
 
+        res.json(user);
+    }
+    else{
+        res.redirect('http://localhost:8000');
+    }
 })
 
 app.listen(port, async () => {    
