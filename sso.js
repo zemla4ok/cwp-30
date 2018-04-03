@@ -43,7 +43,7 @@ app.post('/login', async (req, res) => {
     }
     else{
         codes = JSON.parse(user.codes);
-        const num = Math.floor(Math.random() * 4) + 1;
+        const num = Math.floor(Math.random() * 4);
 
         code = codes[num];
 
@@ -65,8 +65,22 @@ app.get('/codes', (req, res) => {
     res.sendFile(__dirname + '/codes.html');
 })
 
-app.post('/codes', (req, res) => {
-    
+app.post('/codes', async (req, res) => {
+    const token = req.cookies['temptoken'];
+    const data = helpers.verifyToken(token);
+    console.log(code);
+    console.log(req.body.code);
+    if(req.body.code == code && data){
+        const user = await db.user.findById(data.id);
+
+        const newToken = jwt.sign({'id': user.id},
+                                    'secret',
+                                    {expiresIn: 30*60});
+        res.redirect(`http://localhost:7000/token?source=/protected_resource&token=${newToken}`);
+    }
+    else{
+        res.json({code: 400, message: 'invalid code'});
+    }
 })
 
 app.listen(port, async () => {

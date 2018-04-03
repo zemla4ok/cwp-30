@@ -18,13 +18,19 @@ app.get('/protected_resource', async function(req, res) {
     const token = req.cookies[authCookie];
     const userToken = helpers.verifyToken(token);
     if(userToken){
-        const user = await db.user.findById(userData.id);
+        const user = await db.user.findById(userToken.id);
 
         res.json(user);
     }
     else{
         res.redirect('http://localhost:8000/login?source=/protected-resource&callback=localhost:7000/token');
     }
+})
+
+app.get('/token', (req, res) => {
+    res.cookie(authCookie, req.query.token);
+
+    res.redirect(req.query.source);
 })
 
 app.listen(port, async () => {    
